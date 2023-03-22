@@ -1,0 +1,26 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Home|SUP
+        link(rel="stylesheet", href="home.css")
+        script(src="home.js", defer ) 
+    body 
+        nav#nav
+            input#drawer-toggle(type="checkbox")
+            #drawer
+                if loggedIn
+                    img(src=data.picture, alt="Display-Picture")#displayPicture
+                    #userInfo
+                        p=(data.name+" | "+data.nickname)
+                        p=(data.email?data.email:'')
+                        button#logout.log logout
+                else 
+                    h2 Please Login
+                    button#login.log login
+            img(src="Settings.svg", alt="settings")#settings
+        #menu
+        #chat
+            #friendProfile

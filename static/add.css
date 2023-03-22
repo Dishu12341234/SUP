@@ -1,0 +1,30 @@
+input[type="text"] {
+    all: unset;
+    position: absolute;
+    width: 500px;
+
+    left: calc(50% - 510px/2);
+    bottom: 656px;
+    background: #1B1B1B;
+    border-radius: 10px;
+    white-space:pre-line;
+    caret-color: white;
+    padding-left: 10px;
+}
+
+input[type="submit"]
+{
+    all: unset;
+    position: absolute;
+    width: 80px;
+    left: calc(50% - 80px/2);
+    bottom: 600px;
+    background: #1B1B1B;
+    border-radius: 10px;
+}
+
+body
+{
+    background-color: #272727;
+    margin: 0;
+}
