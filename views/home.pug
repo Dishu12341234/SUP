@@ -10,17 +10,21 @@ html(lang="en")
     body 
         nav#nav
             input#drawer-toggle(type="checkbox")
+            if loggedIn
+                img(src="Settings.svg", alt="settings")#settings
+            else 
+                img(src="Settings-loggedOut.svg", alt="settings")#settings
             #drawer
                 if loggedIn
                     img(src=data.picture, alt="Display-Picture")#displayPicture
                     #userInfo
-                        p=(data.name+" | "+data.nickname)
+                        p=(data.nickname+" | "+data.name)
                         p=(data.email?data.email:'')
                         button#logout.log logout
+                        h2 Please Do Not Change Your Username Or Nickname
                 else 
                     h2 Please Login
                     button#login.log login
-            img(src="Settings.svg", alt="settings")#settings
         #menu
         #chat
             #friendProfile

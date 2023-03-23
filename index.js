@@ -15,6 +15,8 @@ require("process")
 
 // mysql -u SUP -p 
 
+let isCreating = 0;
+
 const app = express()
 
 app.use(express.static("static"))
@@ -33,31 +35,14 @@ app.use(auth({
 app.set('view engine', 'pug')
 
 app.get('/', async (req, res) => {
-  const userDetails = req.oidc.user
-  let userName = req.oidc.user?.name
-  let userNickname = req.oidc.user?.nickname
-
-  const promise = new Promise(async (rev, rej) => {
-    if (req.oidc.isAuthenticated()) {
-      sql = `SELECT * FROM users WHERE name = '${userName}'`
-
-      db.query(sql, (err, result) => {
-        if (err) () => { console.log(err); }
-        if (result[0] == undefined && userName != undefined) {
-          sql = `INSERT INTO users VALUES('${userName}','${req.oidc.user?.email ? req.oidc.user?.email : req.oidc.user?.nickname}')`
-          db.query(sql, (err, result) => {
-            console.log(err);
-          })
-
-          sql = `CREATE TABLE ${userNickname} (friendName VARCHAR(30))`
-          db.query(sql)
-        }
-      })
+  const userDetails = req.oidc?.user
+  if(isCreating)  
+    {
+      isCreating = 0
+      res.oidc.logout()
     }
-    rev()
-  })
-  let work = await promise
-  res.render("home", { loggedIn: req.oidc.isAuthenticated(), userName: req.oidc?.user?.name, data: userDetails })
+  else
+    res.render("home", { loggedIn: req.oidc.isAuthenticated(), data: userDetails })
 })
 
 app.get('/addFriend', (req, res) => {
@@ -71,8 +56,49 @@ app.get('/addFriend', (req, res) => {
 })
 
 app.get('/loginUser', (req, res) => {
-  res.oidc.login({ returnTo: "/" })
+  res.oidc.login({ returnTo: "/createUser" })
 })
+
+app.get('/createUser', (req, res) => {
+  const userData = req.oidc.user
+  isCreating = true;
+  sql = `CREATE TABLE IF NOT EXISTS ${userData?.nickname}`+"(nickname VARCHAR(50))"
+  userExists = 0;
+  db.query(sql,(e,r)=>{
+    let userExists = r?.warningCount
+    console.log(!userExists);
+    if(!userExists)
+  {
+    const params =
+    {
+      data: userData
+    }
+    res.render("login", params)
+  }
+  else 
+  {
+    res.redirect('/')
+  }
+  })
+  
+})
+
+app.post('/createUser', (req, res) => {
+  const userData = req.oidc.user
+  if (!(req.body.nickname && req.body.password))
+  {
+    sql = `DROP TABLE ${req.oidc.user.nickname}`
+    db.query(sql,(e,r)=>console.log(e))
+    res.oidc.logout({returnTo:"/"})
+    isCreating = false;
+  }
+  else
+  {
+    isCreating = false;
+    res.json({ ...req.body , ...userData})
+  }
+}
+)
 
 app.get('/logoutUser', (req, res) => {
   res.oidc.logout();

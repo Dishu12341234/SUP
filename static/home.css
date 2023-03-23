@@ -76,6 +76,7 @@ body {
 {
     transform: rotateZ(180deg);
 }
+Z
 
 .log
 {
@@ -94,6 +95,7 @@ body {
     left: 512px;
     border-top-right-radius: 100%;
     border-bottom-right-radius: 100%;
+    transition: all 0.7s cubic-bezier(.32,.17,0,.83);
 }
 
 #userInfo

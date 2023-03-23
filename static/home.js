@@ -9,7 +9,6 @@ const createElement = name => {
 const drawerToggle = getElementById("drawer-toggle")
 
 drawerToggle.checked = false
-
 drawerToggle.addEventListener("click", () => {
     setBackground();
 })
@@ -44,7 +43,7 @@ const setBackground = () => {
         // visit every 10 pixel
         length = data.length
         i = -4
-        while ((i += 4 * 6) < length) {
+        while ((i += 4 * 5) < length) {
             ++count;
             rgb.r += data[i];
             rgb.g += data[i + 1];
